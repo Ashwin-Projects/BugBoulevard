@@ -1,23 +1,40 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { Play, Zap, Trophy, Users } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Play, Zap, Trophy, Users, BookOpen } from "lucide-react";
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleLightningFast = () => {
+    navigate("/game/lightning-fast", { state: { timer: 600, speed: 1.5 } });
+  };
+
+  const handleMultiplayerArena = () => {
+    navigate("/game/multiplayer");
+  };
+
+  const handleLeaderboard = () => {
+    navigate("/leaderboard");
+  };
+
   const features = [
     {
       icon: Zap,
       title: "Lightning Fast",
-      description: "Race against time to fix bugs in real-time coding challenges"
+      description: "Race against time to fix bugs in real-time coding challenges",
+      onClick: handleLightningFast
     },
     {
       icon: Users,
       title: "Multiplayer Arena",
-      description: "Compete with developers worldwide in intense coding battles"
+      description: "Compete with developers worldwide in intense coding battles",
+      onClick: handleMultiplayerArena
     },
     {
       icon: Trophy,
       title: "Ranked Leaderboard",
-      description: "Climb the ranks and prove your debugging supremacy"
+      description: "Climb the ranks and prove your debugging supremacy",
+      onClick: handleLeaderboard
     }
   ];
 
@@ -61,16 +78,15 @@ const Home = () => {
                   </motion.button>
                 </Link>
                 
-                <Link to="/leaderboard">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="btn-secondary-gaming px-8 py-4 rounded-lg flex items-center"
-                  >
-                    <Trophy className="w-5 h-5 mr-3" />
-                    View Rankings
-                  </motion.button>
-                </Link>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate("/game/practice")}
+                  className="btn-secondary-gaming px-8 py-4 rounded-lg flex items-center"
+                >
+                  <BookOpen className="w-5 h-5 mr-3" />
+                  Practice Mode
+                </motion.button>
               </div>
             </motion.div>
           </div>
@@ -98,12 +114,15 @@ const Home = () => {
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <motion.div
+                <motion.button
                   key={index}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.2 }}
-                  className="card-gaming p-8 text-center group"
+                  onClick={feature.onClick}
+                  className="card-gaming p-8 text-center group cursor-pointer hover:shadow-lg hover:shadow-primary/50 transition-all duration-300"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   <div className="relative mb-6 inline-block">
                     <Icon className="w-12 h-12 text-primary group-hover:text-glow-primary transition-colors duration-300" />
@@ -115,7 +134,7 @@ const Home = () => {
                   <p className="text-muted-foreground leading-relaxed">
                     {feature.description}
                   </p>
-                </motion.div>
+                </motion.button>
               );
             })}
           </div>
